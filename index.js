@@ -2,9 +2,28 @@ const express = require("express");
 const app = express();
 const mysql = require("mysql");
 const cors = require("cors");
-
-app.use(cors());
+const fileUpload = require('express-fileupload');
 app.use(express.json());
+app.use(cors());
+app.use(fileUpload());
+
+// Upload Endpoint
+app.post('/upload', (req, res) => {
+  if (req.files === null) {
+    return res.status(400).json({ msg: 'No file uploaded' });
+  }
+
+  const file = req.files.file;
+
+  file.mv(`../coe-420-final/public/uploads/${file.name}`, err => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send(err);
+    }
+
+    res.json({ fileName: file.name, filePath: `/uploads/${file.name}` });
+  });
+});
 const db = mysql.createConnection({
     user: "root",
     host: "localhost",
@@ -69,6 +88,42 @@ const db = mysql.createConnection({
       
     );
   });
+  app.post("/hasPosted", (req, res) => {
+    const email =  req.body.email;
+    db.query(
+      "SELECT blog FROM suitsup.startups WHERE email = ?",
+      [email],
+      (err, result) => {
+        if (err) {
+          console.log({err: err});
+        } 
+        if(result.length > 0){
+          res.send(result);
+        }else{
+          res.send({message: "Error 300"});
+        }
+      }
+      
+    );
+  });
+  app.post("/getPictureDescription", (req, res) => {
+    const email =  req.body.email;
+    db.query(
+      "SELECT blogText FROM suitsup.startups WHERE email = ?",
+      [email],
+      (err, result) => {
+        if (err) {
+          console.log({err: err});
+        } 
+        if(result.length > 0){
+          res.send(result);
+        }else{
+          res.send({message: "Error 600"});
+        }
+      }
+      
+    );
+  });
   app.post("/investorslogin", (req, res) => {
     const email =  req.body.email;
     const password =  req.body.password;
@@ -98,7 +153,37 @@ const db = mysql.createConnection({
       }
     });
 });
- 
+
+app.put("/postblog", (req, res) => {
+  const email = req.body.email;
+  const blog = req.body.blog;
+  db.query(
+    "UPDATE suitsup.startups SET blog = ? WHERE email = ?",
+    [blog, email],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+app.put("/postblogtext", (req, res) => {
+  const email = req.body.email;
+  const blogText = req.body.blogText;
+  db.query(
+    "UPDATE suitsup.startups SET blogText = ? WHERE email = ?",
+    [blogText, email],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
 app.put("/update", (req, res) => {
     const id = req.body.id;
     const wage = req.body.wage;
