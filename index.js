@@ -144,7 +144,7 @@ const db = mysql.createConnection({
       
     );
   });
-  app.get("/employees", (req, res) => {
+  app.get("/investors", (req, res) => {
     db.query("SELECT * FROM suitsup.investors", (err, result) => {
       if (err) {
         console.log(err);
@@ -153,7 +153,15 @@ const db = mysql.createConnection({
       }
     });
 });
-
+app.get("/startups", (req, res) => {
+  db.query("SELECT * FROM suitsup.startups", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
 app.put("/postblog", (req, res) => {
   const email = req.body.email;
   const blog = req.body.blog;
