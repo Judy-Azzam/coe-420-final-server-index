@@ -198,9 +198,10 @@ app.put("/createprofile", (req, res) => {
   const numofPeople = req.body.numofPeople;
   const industryName = req.body.industryName;
   const emirateName = req.body.emirateName;
+  const companyDesc= req.body.companyDesc;
   db.query(
-    "UPDATE suitsup.startups SET companyWebsite = ?, numofPeople = ?, industryName = ?, emirateName = ? WHERE email = ?",
-    [companyWebsite, numofPeople, industryName, emirateName, email],
+    "UPDATE suitsup.startups SET companyWebsite = ?, numofPeople = ?, industryName = ?, emirateName = ?, companyDesc = ? WHERE email = ?",
+    [companyWebsite, numofPeople, industryName, emirateName, companyDesc, email],
     (err, result) => {
       if (err) {
         console.log(err);
