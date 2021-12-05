@@ -192,20 +192,23 @@ app.put("/postblogtext", (req, res) => {
     }
   );
 });
-app.put("/update", (req, res) => {
-    const id = req.body.id;
-    const wage = req.body.wage;
-    db.query(
-      "UPDATE suitsup.investors SET wage = ? WHERE id = ?",
-      [wage, id],
-      (err, result) => {
-        if (err) {
-          console.log(err);
-        } else {
-          res.send(result);
-        }
+app.put("/createprofile", (req, res) => {
+  const email = req.body.email;
+  const companyWebsite = req.body.companyWebsite;
+  const numofPeople = req.body.numofPeople;
+  const industryName = req.body.industryName;
+  const emirateName = req.body.emirateName;
+  db.query(
+    "UPDATE suitsup.startups SET companyWebsite = ?, numofPeople = ?, industryName = ?, emirateName = ? WHERE email = ?",
+    [companyWebsite, numofPeople, industryName, emirateName, email],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
       }
-    );
+    }
+  );
 });
  
 app.delete("/delete/:id", (req, res) => {
