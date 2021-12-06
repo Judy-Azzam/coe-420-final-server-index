@@ -192,7 +192,7 @@ app.put("/postblogtext", (req, res) => {
     }
   );
 });
-app.put("/createprofile", (req, res) => {
+app.put("/editstartupprofile", (req, res) => {
   const email = req.body.email;
   const companyWebsite = req.body.companyWebsite;
   const numofPeople = req.body.numofPeople;
@@ -202,6 +202,24 @@ app.put("/createprofile", (req, res) => {
   db.query(
     "UPDATE suitsup.startups SET companyWebsite = ?, numofPeople = ?, industryName = ?, emirateName = ?, companyDesc = ? WHERE email = ?",
     [companyWebsite, numofPeople, industryName, emirateName, companyDesc, email],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+app.put("/editinvestorprofile", (req, res) => {
+  const email = req.body.email;
+  const companyWebsite = req.body.companyWebsite;
+  const phoneNumber = req.body.phoneNumber;
+  
+  db.query(
+    "UPDATE suitsup.startups SET companyWebsite = ?, phoneNumber = ? WHERE email = ?",
+    [companyWebsite, phoneNumber, email],
     (err, result) => {
       if (err) {
         console.log(err);
