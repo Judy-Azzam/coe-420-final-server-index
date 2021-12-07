@@ -230,9 +230,20 @@ app.put("/editinvestorprofile", (req, res) => {
   );
 });
  
-app.delete("/delete/:id", (req, res) => {
-    const id = req.params.id;
-    db.query("DELETE FROM suitsup.investors WHERE id = ?", id, (err, result) => {
+app.delete("/deleteinvestor/:email", (req, res) => {
+  const email = req.params.email;
+    db.query("DELETE FROM suitsup.investors WHERE email = ?", email, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    });
+});
+
+app.delete("/deletestartup/:email", (req, res) => {
+  const email = req.params.email;
+    db.query("DELETE FROM suitsup.startups WHERE email = ?", email, (err, result) => {
       if (err) {
         console.log(err);
       } else {
