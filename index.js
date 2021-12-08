@@ -162,6 +162,15 @@ app.get("/startups", (req, res) => {
     }
   });
 });
+app.get("/blogs", (req, res) => {
+  db.query("SELECT companyName, blog, blogText FROM suitsup.startups", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
 app.put("/postblog", (req, res) => {
   const email = req.body.email;
   const blog = req.body.blog;
@@ -229,27 +238,26 @@ app.put("/editinvestorprofile", (req, res) => {
     }
   );
 });
- 
 app.delete("/deleteinvestor/:email", (req, res) => {
-  const email = req.params.email;
-    db.query("DELETE FROM suitsup.investors WHERE email = ?", email, (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        res.send(result);
-      }
-    });
+const email = req.params.email;
+db.query("DELETE FROM suitsup.investors WHERE email = ?", email, (err, result) => {
+  if (err) {
+    console.log(err);
+  } else {
+    res.send(result);
+  }
+});
 });
 
 app.delete("/deletestartup/:email", (req, res) => {
-  const email = req.params.email;
-    db.query("DELETE FROM suitsup.startups WHERE email = ?", email, (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        res.send(result);
-      }
-    });
+const email = req.params.email;
+db.query("DELETE FROM suitsup.startups WHERE email = ?", email, (err, result) => {
+  if (err) {
+    console.log(err);
+  } else {
+    res.send(result);
+  }
+});
 });
 app.listen(3001, () => {
     console.log("Yey, your server is running on port 3001");
